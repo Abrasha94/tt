@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: hash-translator
+
+server:
+  port: 8081
