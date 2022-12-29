@@ -18,7 +18,7 @@ public class HashService {
     private final HashRepository hashRepository;
     private final ApplicationRepository applicationRepository;
 
-    @Async
+    @Async("threadPoolTaskExecutor")
     public void decodeHash(String applicationId) {
         final Application application = applicationRepository.findById(applicationId)
                 .orElseThrow(() -> new ApplicationNotFoundException("Application not found"));
