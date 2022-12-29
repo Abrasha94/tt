@@ -8,8 +8,9 @@ import tt.hashtranslator.model.Hash;
 import tt.hashtranslator.repository.ApplicationRepository;
 import tt.hashtranslator.repository.HashRepository;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -21,8 +22,20 @@ public class ApplicationService {
     public String createApplication(CreateApplicationDto dto) {
 
         final List<String> stringHashes = dto.getHashes();
+        List<Hash> hashes = new ArrayList<>();
 
-        final List<Hash> hashes = stringHashes.stream().map(hash -> hashRepository.insert(new Hash(hash))).collect(Collectors.toList());
+        for (String stringHash : stringHashes) {
+
+            final Optional<Hash> hash = hashRepository.findByHash(stringHash);
+
+            if (hash.isPresent()) {
+                hashes.add(hash.get());
+                continue;
+            }
+
+            final Hash newHash = hashRepository.insert(new Hash(stringHash));
+            hashes.add(newHash);
+        }
 
         Application application = new Application();
         application.setHashes(hashes);

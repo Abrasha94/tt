@@ -18,8 +18,8 @@ public class AuthClientImpl implements AuthClient {
         final String encodeEmailPassword = authHeader.substring(6);
 
         final ResponseEntity<HttpStatus> response =
-                authRestTemplate.postForEntity("auth", encodeEmailPassword, HttpStatus.class);
+                authRestTemplate.postForEntity("http://localhost:8080/api/v1/authorization/auth", encodeEmailPassword, HttpStatus.class);
 
-        return response.getBody();
+        return response.getStatusCode();
     }
 }

@@ -10,11 +10,11 @@ public class RestTemplateConfig {
 
     @Bean("authRestTemplate")
     public RestTemplate getAuthRestTemplate(RestTemplateBuilder restTemplateBuilder) {
-        return restTemplateBuilder.rootUri("/api/v1/authorization/").build();
+        return restTemplateBuilder.build();
     }
 
-    @Bean("hashRestTemplate")
+    @Bean("md5DecryptRestTemplate")
     public RestTemplate getHashRestTemplate(RestTemplateBuilder restTemplateBuilder) {
-        return restTemplateBuilder.rootUri("/api/hash/").build();
+        return restTemplateBuilder.build();
     }
 }

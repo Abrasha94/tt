@@ -30,8 +30,8 @@ public class SecurityConfig {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers("/api/authorization/user/**").permitAll()
-                .antMatchers("/api/authorization/admin/**").hasRole("ADMIN")
+                .antMatchers("/api/v1/authorization/auth").permitAll()
+                .antMatchers("/api/v1/authorization/admin/**").hasRole("ADMIN")
                 .anyRequest().authenticated();
         return http.build();
     }
