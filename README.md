@@ -16,8 +16,8 @@ HashTranslator сам не выполняет расшифровку хешей,
 ### REST API для обработки заявок
 
 ```http applications request
-POST /api/applications
-Authorization: Basic dGVzdEB1c2VyLmVkbi5ieTpzb21lUGFzc3dvcmQ=
+POST localhost:8081/api/v1/hashtranslator/
+Authorization: Basic dGVzdEBhZG1pbi5lZG4uYnk6c29tZVBhc3N3b3Jk
 Content-Type: application/json
 {
   "hashes": [
@@ -29,8 +29,8 @@ Content-Type: application/json
 ```
 
 ```http applications result request
-GET /api/applications/{id}
-Authorization: Basic dGVzdEB1c2VyLmVkbi5ieTpzb21lUGFzc3dvcmQ=
+GET localhost:8081/api/v1/hashtranslator/{id}
+Authorization: Basic dGVzdEBhZG1pbi5lZG4uYnk6c29tZVBhc3N3b3Jk
 ```
 
 При приёме заявки производится синхронная basic-авторизация, валидация структуры заявки и формата данных.  
@@ -39,11 +39,9 @@ Authorization: Basic dGVzdEB1c2VyLmVkbi5ieTpzb21lUGFzc3dvcmQ=
 При получении результата обработки заявки, в ответе должен возвращаться json со структурой:
 ```
 {
-   "hashes":[
-      {
+   "hashes":{
          "hash":"result"
       }
-   ]
 }
 ```
 
