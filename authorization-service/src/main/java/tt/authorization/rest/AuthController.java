@@ -28,7 +28,7 @@ public class AuthController {
             authService.authorize(encodeEmailPassword);
             return new ResponseEntity<>(HttpStatus.ACCEPTED);
         } catch (UsernameNotFoundException | IncorrectPasswordException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
         }
     }
 }

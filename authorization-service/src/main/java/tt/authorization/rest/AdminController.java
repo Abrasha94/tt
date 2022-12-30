@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 import tt.authorization.dto.request.UserCreateDto;
 import tt.authorization.dto.response.ResponseUserDto;
+import tt.authorization.exception.UserExistException;
 import tt.authorization.model.User;
 import tt.authorization.service.UserService;
 
@@ -30,8 +31,8 @@ public class AdminController {
         try {
             final User user = userServiceImpl.createUser(dto);
             return new ResponseEntity<>(ResponseUserDto.fromUser(user), HttpStatus.OK);
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "User not created", e);
+        } catch (UserExistException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User exist", e);
         }
     }
 

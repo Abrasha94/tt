@@ -36,7 +36,12 @@ public class Md5DecryptClientImpl implements Md5DecryptClient {
                 final String decodedHash = md5DecryptRestTemplate
                         .getForObject(String.format(MD5_URL_WITH_PARAMS, stringHash, EMAIL, CODE), String.class);
 
-                hash.setDecodeResult(decodedHash);
+                if (decodedHash == null) {
+                    hash.setDecodeResult("");
+                } else {
+                    hash.setDecodeResult(decodedHash);
+                }
+
                 hashRepository.save(hash);
             }
         }
