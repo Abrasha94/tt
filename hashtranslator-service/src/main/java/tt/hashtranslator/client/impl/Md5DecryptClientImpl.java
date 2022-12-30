@@ -17,6 +17,8 @@ public class Md5DecryptClientImpl implements Md5DecryptClient {
 
     private static final String EMAIL = "topdisplay4ik@gmail.com";
     private static final String CODE = "527dff0f187b11eb";
+    public static final String MD5_URL_WITH_PARAMS =
+            "https://md5decrypt.net/en/Api/api.php?hash=%s&hash_type=md5&email=%s&code=%s";
 
     private final RestTemplate md5DecryptRestTemplate;
     private final HashRepository hashRepository;
@@ -27,12 +29,13 @@ public class Md5DecryptClientImpl implements Md5DecryptClient {
 
         for (String stringHash : hashes) {
 
-            final Hash hash = hashRepository.findByHash(stringHash).orElseThrow(() -> new HashNotFoundException("Hash not found"));
+            final Hash hash = hashRepository.findByHash(stringHash)
+                    .orElseThrow(() -> new HashNotFoundException("Hash not found"));
 
             if (hash.getDecodeResult() == null) {
-
                 final String decodedHash = md5DecryptRestTemplate
-                        .getForObject(String.format("https://md5decrypt.net/en/Api/api.php?hash=%s&hash_type=md5&email=%s&code=%s", stringHash, EMAIL, CODE), String.class);
+                        .getForObject(String.format(MD5_URL_WITH_PARAMS, stringHash, EMAIL, CODE), String.class);
+
                 hash.setDecodeResult(decodedHash);
                 hashRepository.save(hash);
             }

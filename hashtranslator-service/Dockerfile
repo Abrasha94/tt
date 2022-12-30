@@ -8,6 +8,6 @@ RUN ./gradlew --no-daemon build
 
 FROM openjdk:8-jre-alpine
 WORKDIR /app
-EXPOSE 8080
+EXPOSE 8081
 CMD ["java", "-jar", "/app/hashtranslator.jar"]
 COPY --from=builder /app/build/libs/hashtranslator-*.jar hashtranslator.jar

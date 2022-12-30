@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 import tt.authorization.exception.IncorrectPasswordException;
-import tt.authorization.model.User;
 import tt.authorization.service.AuthService;
 
 @Slf4j
@@ -26,7 +25,7 @@ public class AuthController {
     public ResponseEntity<HttpStatus> authorize(@RequestBody String encodeEmailPassword) {
 
         try {
-            final User user = authService.authorize(encodeEmailPassword);
+            authService.authorize(encodeEmailPassword);
             return new ResponseEntity<>(HttpStatus.ACCEPTED);
         } catch (UsernameNotFoundException | IncorrectPasswordException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);

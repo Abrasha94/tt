@@ -2,18 +2,20 @@ package tt.hashtranslator.rest;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
-import tt.hashtranslator.client.AuthClient;
 import tt.hashtranslator.client.Md5DecryptClient;
 import tt.hashtranslator.dto.request.CreateApplicationDto;
 import tt.hashtranslator.dto.response.ResultOfApplicationDto;
 import tt.hashtranslator.exception.ApplicationNotFoundException;
 import tt.hashtranslator.service.ApplicationService;
-import tt.hashtranslator.service.HashService;
 import tt.hashtranslator.validation.CreateApplicationRequestValidate;
 
 import javax.validation.Valid;
@@ -24,19 +26,12 @@ import javax.validation.Valid;
 @RequiredArgsConstructor
 public class HashController {
 
-    private final AuthClient authClient;
     private final Md5DecryptClient md5DecryptClient;
     private final ApplicationService applicationService;
-    private final HashService hashService;
     private final CreateApplicationRequestValidate validate;
 
     @PostMapping
-    public ResponseEntity<String> createApplication(@Valid @RequestBody CreateApplicationDto requestDto, @RequestHeader(HttpHeaders.AUTHORIZATION) String authHeader) {
-        final HttpStatus authorize = authClient.authorize(authHeader);
-
-        if (authorize.is4xxClientError()) {
-            return new ResponseEntity<>("Sorry you are not authorized", HttpStatus.UNAUTHORIZED);
-        }
+    public ResponseEntity<String> createApplication(@Valid @RequestBody CreateApplicationDto requestDto) {
 
         if (validate.isValid(requestDto.getHashes())) {
             final String applicationId = applicationService.createApplication(requestDto);
@@ -49,8 +44,9 @@ public class HashController {
 
     @GetMapping("{id}")
     public ResponseEntity<ResultOfApplicationDto> getResultOfApplication(@PathVariable("id") String applicationId) {
+
         try {
-            final ResultOfApplicationDto resultOfApplication = hashService.getResultOfApplication(applicationId);
+            final ResultOfApplicationDto resultOfApplication = applicationService.getResultOfApplication(applicationId);
             return new ResponseEntity<>(resultOfApplication, HttpStatus.OK);
         } catch (ApplicationNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Application not found", e);
