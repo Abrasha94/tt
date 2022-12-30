@@ -13,6 +13,23 @@ HashTranslator сам не выполняет расшифровку хешей,
 
 ## Требования
 
+### REST API для создания и удаления юзера
+
+```http user create
+POST localhost:8080/api/v1/authorization/admin/users
+Authorization: Basic dGVzdEBhZG1pbi5lZG4uYnk6c29tZVBhc3N3b3Jk
+Content-Type: application/json
+{
+    "email":"test@user.edn.by",
+    "password":"minimalPass"
+}
+```
+
+```http user delete
+DELETE localhost:8080/api/v1/authorization/admin/users/{id}
+Authorization: Basic dGVzdEBhZG1pbi5lZG4uYnk6c29tZVBhc3N3b3Jk
+```
+
 ### REST API для обработки заявок
 
 ```http applications request
@@ -62,7 +79,6 @@ Authorization: Basic dGVzdEBhZG1pbi5lZG4uYnk6c29tZVBhc3N3b3Jk
 Для начала работы представлен шаблон типичного микросервиса, инфраструктура сборки и развёртывания.
 Пользоваться шаблоном не обязательно - можно делать с нуля по собственному видению, ограничений нет.
 Для выполнения задания желательно использовать Docker и Docker Compose.
-
 
 ## Примечание
 
