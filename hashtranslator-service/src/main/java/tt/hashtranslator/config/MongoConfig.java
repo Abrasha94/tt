@@ -15,6 +15,8 @@ import java.util.Collections;
 @EnableMongoRepositories(basePackages = "tt.hashtranslator.repository")
 public class MongoConfig extends AbstractMongoClientConfiguration {
 
+    public static final String MONGODB_CONNECTION = "mongodb://application-database:27017/edn";
+
     @Override
     protected String getDatabaseName() {
         return "edn";
@@ -22,7 +24,7 @@ public class MongoConfig extends AbstractMongoClientConfiguration {
 
     @Override
     public MongoClient mongoClient() {
-        final ConnectionString connectionString = new ConnectionString("mongodb://localhost:27017/edn");
+        final ConnectionString connectionString = new ConnectionString(MONGODB_CONNECTION);
         final MongoClientSettings mongoClientSettings = MongoClientSettings.builder()
                 .applyConnectionString(connectionString)
                 .build();

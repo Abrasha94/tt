@@ -10,14 +10,14 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import tt.authorization.service.UserService;
+import tt.authorization.service.impl.DetailsService;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
     @Autowired
-    private UserService userService;
+    private DetailsService detailsService;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -30,15 +30,15 @@ public class SecurityConfig {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers("/api/authorization/user/**").permitAll()
-                .antMatchers("/api/authorization/admin/**").hasRole("ADMIN")
+                .antMatchers("/api/v1/authorization/auth").permitAll()
+                .antMatchers("/api/v1/authorization/admin/**").hasRole("ADMIN")
                 .anyRequest().authenticated();
         return http.build();
     }
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userService);
+        auth.userDetailsService(detailsService);
     }
 
     @Bean

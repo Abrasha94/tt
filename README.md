@@ -13,11 +13,28 @@ HashTranslator сам не выполняет расшифровку хешей,
 
 ## Требования
 
+### REST API для создания и удаления юзера
+
+```http user create
+POST localhost:8080/api/v1/authorization/admin/users
+Authorization: Basic dGVzdEBhZG1pbi5lZG4uYnk6c29tZVBhc3N3b3Jk
+Content-Type: application/json
+{
+    "email":"test@user.edn.by",
+    "password":"minimalPass"
+}
+```
+
+```http user delete
+DELETE localhost:8080/api/v1/authorization/admin/users/{id}
+Authorization: Basic dGVzdEBhZG1pbi5lZG4uYnk6c29tZVBhc3N3b3Jk
+```
+
 ### REST API для обработки заявок
 
 ```http applications request
-POST /api/applications
-Authorization: Basic dGVzdEB1c2VyLmVkbi5ieTpzb21lUGFzc3dvcmQ=
+POST localhost:8081/api/v1/hashtranslator/
+Authorization: Basic dGVzdEBhZG1pbi5lZG4uYnk6c29tZVBhc3N3b3Jk
 Content-Type: application/json
 {
   "hashes": [
@@ -29,8 +46,8 @@ Content-Type: application/json
 ```
 
 ```http applications result request
-GET /api/applications/{id}
-Authorization: Basic dGVzdEB1c2VyLmVkbi5ieTpzb21lUGFzc3dvcmQ=
+GET localhost:8081/api/v1/hashtranslator/{id}
+Authorization: Basic dGVzdEBhZG1pbi5lZG4uYnk6c29tZVBhc3N3b3Jk
 ```
 
 При приёме заявки производится синхронная basic-авторизация, валидация структуры заявки и формата данных.  
@@ -39,11 +56,9 @@ Authorization: Basic dGVzdEB1c2VyLmVkbi5ieTpzb21lUGFzc3dvcmQ=
 При получении результата обработки заявки, в ответе должен возвращаться json со структурой:
 ```
 {
-   "hashes":[
-      {
+   "hashes":{
          "hash":"result"
       }
-   ]
 }
 ```
 
@@ -64,7 +79,6 @@ Authorization: Basic dGVzdEB1c2VyLmVkbi5ieTpzb21lUGFzc3dvcmQ=
 Для начала работы представлен шаблон типичного микросервиса, инфраструктура сборки и развёртывания.
 Пользоваться шаблоном не обязательно - можно делать с нуля по собственному видению, ограничений нет.
 Для выполнения задания желательно использовать Docker и Docker Compose.
-
 
 ## Примечание
 

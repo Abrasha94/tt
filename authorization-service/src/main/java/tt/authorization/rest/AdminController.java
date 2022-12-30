@@ -12,7 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 import tt.authorization.dto.request.UserCreateDto;
-import tt.authorization.dto.response.UserDto;
+import tt.authorization.dto.response.ResponseUserDto;
+import tt.authorization.exception.UserExistException;
 import tt.authorization.model.User;
 import tt.authorization.service.UserService;
 
@@ -22,15 +23,16 @@ import tt.authorization.service.UserService;
 @RequiredArgsConstructor
 public class AdminController {
 
-    private final UserService userService;
+    private final UserService userServiceImpl;
 
     @PostMapping("users")
-    public ResponseEntity<UserDto> createUser(@RequestBody UserCreateDto dto) {
+    public ResponseEntity<ResponseUserDto> createUser(@RequestBody UserCreateDto dto) {
+
         try {
-            final User user = userService.createUser(dto);
-            return new ResponseEntity<>(UserDto.fromUser(user), HttpStatus.OK);
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "User not created", e);
+            final User user = userServiceImpl.createUser(dto);
+            return new ResponseEntity<>(ResponseUserDto.fromUser(user), HttpStatus.OK);
+        } catch (UserExistException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User exist", e);
         }
     }
 
@@ -38,7 +40,7 @@ public class AdminController {
     public ResponseEntity<HttpStatus> deleteUser(@PathVariable("id") Long userId) {
 
         try {
-            userService.deleteUser(userId);
+            userServiceImpl.deleteUser(userId);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error on server", e);

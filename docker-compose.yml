@@ -5,18 +5,20 @@ services:
   hash-translator:
     build:
       context: hashtranslator-service
-    restart: on-failure
-    environment:
-      HASHTRANSLATOR_HELLO_TEMPLATE: configured hashtranslator hello for %s from %s
+    restart: unless-stopped
+    depends_on:
+      - application-database
     ports:
-      - "8080:8080"
+      - "8081:8081"
 
   authorization-service:
     build:
       context: authorization-service
-    restart: on-failure
-    environment:
-      AUTHORIZATION_HELLO_TEMPLATE: configured authorization hello for %s from %s
+    restart: unless-stopped
+    depends_on:
+      - users-database
+    ports:
+      - "8080:8080"
 
   users-database:
     container_name: postgres
@@ -25,11 +27,11 @@ services:
     env_file:
       - authorization-service/environment/database.postgres.env
     ports:
-      -  "5432:5432"
+      - "5432:5432"
 
   application-database:
     container_name: mongo
-    image:  mongo:4.2.23-rc1
+    image: mongo:4.2.23-rc1
     ports:
       - "27017:27017"
     restart: unless-stopped

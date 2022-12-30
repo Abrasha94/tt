@@ -11,6 +11,8 @@ import tt.hashtranslator.client.AuthClient;
 @RequiredArgsConstructor
 public class AuthClientImpl implements AuthClient {
 
+    public static final String AUTH_URL = "http://authorization-service:8080/api/v1/authorization/auth";
+
     private final RestTemplate authRestTemplate;
 
     @Override
@@ -18,8 +20,8 @@ public class AuthClientImpl implements AuthClient {
         final String encodeEmailPassword = authHeader.substring(6);
 
         final ResponseEntity<HttpStatus> response =
-                authRestTemplate.postForEntity("auth", encodeEmailPassword, HttpStatus.class);
+                authRestTemplate.postForEntity(AUTH_URL, encodeEmailPassword, HttpStatus.class);
 
-        return response.getBody();
+        return response.getStatusCode();
     }
 }
